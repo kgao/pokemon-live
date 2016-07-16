@@ -77,7 +77,7 @@ if (Meteor.isClient) {
             //observe the db
             MapMarkers.find().observe({
                 added: function (document) {
-                    var pokemon = 'pikachu';
+                    var pokemon = Session.get('selectedPokemon') || 'pikachu';
                     var imgIcon = '/img/pokemon/pikachu.png';
                     var pinIcon = new google.maps.MarkerImage(
                         '/img/pokemon/'+ pokemon +'.png',
@@ -153,21 +153,26 @@ if (Meteor.isClient) {
     });
 
     //Floating panel view
+    //todo: instant search bar -> https://meteorhacks.com/implementing-an-instant-search-solution-with-meteor/
     Template.floatingPanel.helpers({
-    pokemons: function(){
-        //Icon names
-        return ['abra','aerodactyl','alakazam','arbok','arcanine','articuno','beedrill','bellsprout','blastoise','bulbasaur','butterfree','caterpie','chansey','charizard','charmander','charmeleon','clefable','clefairy','cloyster','cubone','dewgong','diglett','ditto','dodrio','doduo','dragonair','dragonite','dratini','drowzee','dugtrio','eevee','ekans','electabuzz','electrode','exeggcute','exeggutor','farfetch','fearow','flareon','gastly','gengar','geodude','gloom','golbat','goldeen','golduck','golem','graveler','grimer','growlithe','gyarados','haunter','hitmonchan','hitmonlee','horsea','hypno','ivysaur','jigglypuff','jolteon','jynx','kabuto','kabutops','kadabra','kakuna','kangaskhan','kingler','koffing','krabby','lapras','lickitung','machamp','machoke','machop','magikarp','magmar','magnemite','magneton','mankey','marowak','meowth','metapod','mew','mewtwo','moltres','mrmime','muk','nidoking','nidoqueen','nidoranf','nidoranm','nidorina','nidorino','ninetales','oddish','omanyte','omastar','onix','paras','parasect','persian','pidgeot','pidgeotto','pidgey','pikachu','pinsir','pokeball','poliwag','poliwhirl','poliwrath','ponyta','porygon','primeape','psyduck','raichu','rapidash','raticate','rattata','rhydon','rhyhorn','riolu','sandshrew','sandslash','scyther','seadra','seaking','seel','shellder','slowbro','slowpoke','snorlax','spearow','squirtle','starmie','staryu','tangela','tauros','tentacool','tentacruel','vaporeon','venomoth','venonat','venusaur','victreebel','vileplume','voltorb','vulpix','wartortle','weedle','weepinbell','weezing','wigglytuff','zapdos','zubat'];
+        "pokemons": function() {
+            //Icon names
+            return ['abra','aerodactyl','alakazam','arbok','arcanine','articuno','beedrill','bellsprout','blastoise','bulbasaur','butterfree','caterpie','chansey','charizard','charmander','charmeleon','clefable','clefairy','cloyster','cubone','dewgong','diglett','ditto','dodrio','doduo','dragonair','dragonite','dratini','drowzee','dugtrio','eevee','ekans','electabuzz','electrode','exeggcute','exeggutor','farfetch','fearow','flareon','gastly','gengar','geodude','gloom','golbat','goldeen','golduck','golem','graveler','grimer','growlithe','gyarados','haunter','hitmonchan','hitmonlee','horsea','hypno','ivysaur','jigglypuff','jolteon','jynx','kabuto','kabutops','kadabra','kakuna','kangaskhan','kingler','koffing','krabby','lapras','lickitung','machamp','machoke','machop','magikarp','magmar','magnemite','magneton','mankey','marowak','meowth','metapod','mew','mewtwo','moltres','mrmime','muk','nidoking','nidoqueen','nidoranf','nidoranm','nidorina','nidorino','ninetales','oddish','omanyte','omastar','onix','paras','parasect','persian','pidgeot','pidgeotto','pidgey','pikachu','pinsir','pokeball','poliwag','poliwhirl','poliwrath','ponyta','porygon','primeape','psyduck','raichu','rapidash','raticate','rattata','rhydon','rhyhorn','riolu','sandshrew','sandslash','scyther','seadra','seaking','seel','shellder','slowbro','slowpoke','snorlax','spearow','squirtle','starmie','staryu','tangela','tauros','tentacool','tentacruel','vaporeon','venomoth','venonat','venusaur','victreebel','vileplume','voltorb','vulpix','wartortle','weedle','weepinbell','weezing','wigglytuff','zapdos','zubat'];
         }
     });
 
     Template.floatingPanel.events({
         "change #pokemon-select": function (event, template) {
-            var category = $(event.currentTarget).val();
-            console.log("Pokemon: " + pokemon);
-            // additional code to do what you want with the category
+            var pokemon = $(event.currentTarget).val();
+            // additional code to do what you want with the pokemon
+            // update the marker icon
+            Session.set('selectedPokemon', pokemon);
+            console.log("Pokemon: ", Session.get('selectedPokemon'));
         }
     });
-
+    // UI.registerHelper('selected', function(key, value){
+    //    return key == value? {selected:'selected'}: '';
+    // });
 
     //Markers list view
     Template.MapMarkersList.helpers({
@@ -175,9 +180,9 @@ if (Meteor.isClient) {
             if (GoogleMaps.loaded()) {
                 return MapMarkers.find().fetch().reverse();
             }
-
         }
-    })
+    });
+
     //events for list view items
     Template.MapMarkersList.events({
         'mouseenter li': function (e) {
@@ -189,14 +194,14 @@ if (Meteor.isClient) {
             }, 500);
 
         }
-    })
+    });
 }
 
 Meteor.methods({
     //todo: Server storage protection logic
     cleanOldMakers: function () {
         var now = new Date();
-        var ts = now.getTime() / 1000 - 30; //? secs ago
+        var ts = now.getTime() / 1000 - 300; //? secs ago
         //MapMarkers.remove({createdAt: { $lte: AnHourAgo }});
         // var num = MapMarkers.find({accuracy: { $lte: ts }},{fields: {'_id':1}}).count(); //list 0 - ?
         // if(num>0){
@@ -223,6 +228,6 @@ if (Meteor.isServer) {
         // 2. remove/archive  docs older than 30min
         Meteor.setInterval(function() { 
             Meteor.call('cleanOldMakers');
-        }, 30000); // every ? ms
+        }, 300000); // every ? ms
     });
 }

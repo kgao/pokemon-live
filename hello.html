@@ -19,24 +19,22 @@
             {{> googleMap name="exampleMap" options=exampleMapOptions}}
         </div>
         <div class="map-view-list">
-            {{>MapMarkersList}}
+            {{> MapMarkersList}}
         </div>
 
     </main>
 
 </body>
 
-<template name="floatingPanel">
-      
-      <select id="pokemon-select">
-            <option disabled="disabled" selected="selected">Please Select</option> 
+<template name="floatingPanel">     
+      <select id="pokemon-select" class="browser-default">
+            <option disabled="disabled" selected="selected">Please Select A Pokémon</option> 
             {{#each pokemons}}
                 <option value="{{this}}">{{this}}</option>
             {{/each}}
       </select>
-      <input onclick="addMarkers();" type=button value="Report">
-      <input onclick="showMarkers();" type=button value="Search">
-
+      <!--<input onclick="addMarkers();" type=button value="Report">
+      <input onclick="showMarkers();" type=button value="Search">-->
 </template>
 
 <template name="MapMarkersList">
