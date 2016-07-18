@@ -6,6 +6,9 @@ MapMarkers = new Mongo.Collection('map');
 if (Meteor.isClient) {
     Meteor.startup(function () {
 
+        Meteor.subscribe("Users");
+        Meteor.subscribe("MapMarkers");
+
         if (navigator.geolocation) {
             console.log('Getting users location.');
             navigator.geolocation.getCurrentPosition(function (geo) {
@@ -59,12 +62,13 @@ if (Meteor.isClient) {
                 //  "accuracy": 1200.4
                 // }
                 var now = new Date();
-                MapMarkers.insert({
+                var newMarker = {
                     createdAt: now,
                     lat: event.latLng.lat(),
                     lng: event.latLng.lng(),
                     accuracy: now.getTime()/1000
-                });
+                };
+                Meteor.call('insertMarker', newMarker);
                 //todo: remove console log
                 console.log(event);
             });
@@ -211,11 +215,21 @@ Meteor.methods({
        console.log('Cleaning DB at:' + now);
        // todo: archive the data for analysis   
        MapMarkers.remove({accuracy: { $lte: ts }});          
+    },
+    insertMarker: function(obj){
+        MapMarkers.insert(obj);
     }
 });
 
 if (Meteor.isServer) {
     Meteor.startup(function () {
+
+        Meteor.publish("MapMarkers", function() {
+          return MapMarkers.find();
+        });
+        Meteor.publish("Users", function() {
+          return Meteor.users.find();
+        });
         // code to run on server at startup
         //////////////////////////////////////////////////////////
         // Setup a scheduler job to clean up the markers map db

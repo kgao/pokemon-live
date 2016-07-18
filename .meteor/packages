@@ -5,8 +5,9 @@
 # but you can also edit it by hand.
 
 meteor-platform
-autopublish
-insecure
 materialize:materialize
 dburles:google-maps
 session
+mizzao:bootboxjs
+mizzao:accounts-testing
+msavin:mongol
