@@ -1,5 +1,6 @@
 <head>
-  <title>Pokémon Live Map v0.0.1</title>
+ <link rel='icon' href='/img/favicon.ico'>
+ <title>Pokémon Live Map v0.0.1</title>
 </head>
 
 <body>
@@ -42,28 +43,25 @@
         <ul class="collection">
             {{#each mapMarker}}
                 <li class="collection-item {{selectedClass}}">
-
+                    <img src="/img/pokemon/{{name}}.png" style="width:45px; height:45px;"/>
                     <p>
-                        <small>
-                            Pokemon: {{name}}
-                        </small>
+                        <big>
+                            {{name}}
+                        </big>
                     </p>
                     <p>
                         <small>
                             Lat: {{lat}}
                         </small>
-                    </p>
-                    <p>
+                        <br/>
                         <small>
                             Long: {{lng}}
                         </small>
-                    </p>
-                    <p>
+                        <br/>
                         <small>
                             Accuracy: {{accuracy}}
                         </small>
-                    </p>
-                    <p>
+                        <br/>
                         <small>
                             Updated: {{createdAt}}
                         </small>
