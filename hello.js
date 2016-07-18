@@ -61,9 +61,11 @@ if (Meteor.isClient) {
                 //  },
                 //  "accuracy": 1200.4
                 // }
+                var pokemon = Session.get('selectedPokemon') || 'pikachu'
                 var now = new Date();
                 var newMarker = {
                     createdAt: now,
+                    name: pokemon,           
                     lat: event.latLng.lat(),
                     lng: event.latLng.lng(),
                     accuracy: now.getTime()/1000
@@ -77,12 +79,12 @@ if (Meteor.isClient) {
 
             //markers array
             var markers = {};
-
+         
             //observe the db
             MapMarkers.find().observe({
                 added: function (document) {
-                    var pokemon = Session.get('selectedPokemon') || 'pikachu';
-                    var imgIcon = '/img/pokemon/pikachu.png';
+                    var pokemon = document.name || 'pikachu';
+                    //var imgIcon = '/img/pokemon/pikachu.png';
                     var pinIcon = new google.maps.MarkerImage(
                         '/img/pokemon/'+ pokemon +'.png',
                         null, /* size is determined at runtime */
@@ -90,6 +92,7 @@ if (Meteor.isClient) {
                         null, /* anchor is bottom center of the scaled image */
                         new google.maps.Size(45, 45)  /* scaledSize : new google.maps.Size(width, height) */
                     );
+                    
                     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     //Note: Marker shadows were removed in version 3.14 of the Google Maps JavaScript API. Any shadows specified programmatically will be ignored.
                     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -120,20 +123,19 @@ if (Meteor.isClient) {
                     //update marker POS on drag of marker
                     var now = new Date();
                     google.maps.event.addListener(marker, 'dragend', function (event) {
-                        MapMarkers.update(marker.id, {
-                            $set: {
+                        var obj = {
                                 createdAt: now, 
                                 lat: event.latLng.lat(),
                                 lng: event.latLng.lng(),
                                 accuracy: now.getTime()/1000
-                            }
-                        });
+                        };
+                        Meteor.call("updateMarker", marker.id, obj)
                     });
 
                     // PC only: remove marker POS on right click
                     google.maps.event.addListener(marker, 'rightclick', function (mouseEvent) {
                         //alert('Right click on marker triggered');
-                        MapMarkers.remove(marker.id);
+                        Meteor.call("removeMarker", marker.id);
                     });
 
                     markers[document._id] = marker;
@@ -218,7 +220,22 @@ Meteor.methods({
     },
     insertMarker: function(obj){
         MapMarkers.insert(obj);
+    },
+    removeMarker: function(id){
+        console.log('remove marker id:' + id);
+        MapMarkers.remove(id);
+    },
+    updateMarker: function(id, obj){
+        console.log('update marker id:' + id);
+        MapMarkers.update(id, {
+            $set:obj 
+     });
     }
+    // getMarker: function(id){
+    //     //name only
+    //     console.log('get marker id:' + id);
+    //     return MapMarkers.find({_id: id}, {fields: {'name':1}}).fetch()[0].name;
+    // }
 });
 
 if (Meteor.isServer) {
