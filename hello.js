@@ -15,7 +15,7 @@ if (Meteor.isClient) {
                 Session.set('mapLat', geo.coords.latitude);
                 Session.set('mapLong', geo.coords.longitude);
                 //Localhost
-                //GoogleMaps.load();
+                GoogleMaps.load();
                 ///////////////////////////////////////////////////////////////
                 //Other Origins - Must be secured!
                 //In short, Google recently changed the terms of use of its Google Maps APIs; if you were already using them on a website (different from localhost) prior to June 22nd, 2016, nothing will change for you; otherwise, you need an API key in order to fix your error. The free API key is //valid up to 25,000 map loads per day. :(
@@ -23,7 +23,7 @@ if (Meteor.isClient) {
                 //Run -> chrome --unsafely-treat-insecure-origin-as-secure="http://{yourOwnHost}:{port}"  --user-data-dir=C:\tmp\testprofile
                 
                 //Retrieve the key from https://console.developers.google.com/
-                GoogleMaps.load({ v: '3', key: Meteor.settings.public.google.map.key, libraries: 'geometry,places' });
+                //GoogleMaps.load({ v: '3', key: Meteor.settings.public.google.map.key, libraries: 'geometry,places' });
             });
         }
 
