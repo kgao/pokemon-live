@@ -24,5 +24,5 @@ A real time geolocation pokemon map for Pokemon Go.
 # Deployment
   After deploy your app to any server, you can play with your friends and share the pokemon geolocation with the entire community in real time, enjoy the game!
   <br/>
-  Gotta Catch'em all!
+  Gotta catch'em all ~
   
