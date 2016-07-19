@@ -1,5 +1,5 @@
 # pokemon-live
-A real time geolocation pokemon map for Pokemon 
+A real time geolocation pokemon map for Pokemon Go.
 
 
 # Getting start
@@ -18,5 +18,6 @@ A real time geolocation pokemon map for Pokemon
 </p>
 
 # Deployment
-  After deploy your app to any server, you can play with your friends to share the pokemon geolocation in real time!
+  After deploy your app to any server, you can play with your friends and share the pokemon geolocation with the entire community in real time!
+  <br/>
   Enjoy the game!
