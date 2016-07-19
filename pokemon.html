@@ -1,0 +1,75 @@
+<head>
+ <link rel='icon' href='/img/favicon.ico'>
+ <title>Pokémon Live Map v0.0.1</title>
+</head>
+
+<body>
+    <div class="navbar-fixed ">
+        <nav class="grey lighten-4">
+            <div class="nav-wrapper center-align">
+                <h4 class="blue-grey-text">Pokémon Locations</h4>
+
+            </div>
+        </nav>
+    </div>
+    <main>
+        <div class="map-container">
+            <center>
+            {{> floatingPanel}}
+            </center>
+            {{> googleMap name="exampleMap" options=exampleMapOptions}}
+        </div>
+        <div class="map-view-list">
+            {{> MapMarkersList}}
+        </div>
+
+    </main>
+
+</body>
+
+<template name="floatingPanel">     
+      <select id="pokemon-select" class="browser-default">
+            <option disabled="disabled" selected="selected">Please Select A Pokémon</option> 
+            {{#each pokemons}}
+                <option value="{{this}}">{{this}}</option>
+            {{/each}}
+      </select>
+      <!--<input onclick="addMarkers();" type=button value="Report">
+      <input onclick="showMarkers();" type=button value="Search">-->
+</template>
+
+<template name="MapMarkersList">
+
+        <ul class="collection">
+            {{#each mapMarker}}
+                <li class="collection-item {{selectedClass}}">
+                    <img src="/img/pokemon/{{name}}.png" style="width:45px; height:45px;"/>
+                    <p>
+                        <big>
+                            {{name}}
+                        </big>
+                    </p>
+                    <p>
+                        <small>
+                            Lat: {{lat}}
+                        </small>
+                        <br/>
+                        <small>
+                            Long: {{lng}}
+                        </small>
+                        <br/>
+                        <small>
+                            Accuracy: {{accuracy}}
+                        </small>
+                        <br/>
+                        <small>
+                            Updated: {{createdAt}}
+                        </small>
+                    </p>
+                    
+                </li>
+            {{/each}}
+
+        </ul>
+
+</template>
