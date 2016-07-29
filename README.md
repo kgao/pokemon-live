@@ -26,8 +26,8 @@ A real time geolocation pokemon map for Pokemon Go.
   After deploy your app to any server, you can play with your team friends and share the pokemon geolocation with the entire community in real time, enjoy the game!
   <br/>
   Gotta catch'em all ~
-  
- # Future work
+
+# Future work
   
   > 1. Add cognitive API support to verfiy the input information. 
   > 2. Add Bing search API support.
