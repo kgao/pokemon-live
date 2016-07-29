@@ -9,9 +9,9 @@ A real time geolocation pokemon map for Pokemon Go.
    
    > Windows: [download](https://www.meteor.com/install)
    
-2. Navigate to the project folder:
+2. Navigate to the project folder and type:
 
-   `$meteor`
+   `meteor`
    
    Now your should see  
    `App running at: http://localhost:3000/`
@@ -27,3 +27,8 @@ A real time geolocation pokemon map for Pokemon Go.
   <br/>
   Gotta catch'em all ~
   
+ # Future work
+  
+  > 1. Add cognitive API support to verfiy the input information. 
+  > 2. Add Bing search API support.
+ 
